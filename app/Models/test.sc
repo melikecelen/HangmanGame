@@ -12,3 +12,10 @@ def b(): Unit = {
 }
 
 b()
+
+case class Letter(l:String,c:Int) {
+  val letter=l
+  val cost=c
+}
+
+case class Guess(letter: Option[Letter])

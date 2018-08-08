@@ -4,7 +4,7 @@ package Models
 import scala.collection.mutable.ListBuffer
 
 
-abstract class Card {
+abstract class Card{
   val name: String
   val cost: Int
   val availableCount: Int

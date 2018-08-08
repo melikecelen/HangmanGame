@@ -1,6 +1,6 @@
 package controllers
 
-import Models.{Card, Letter, Move}
+import Models.{ActiveCardException, Card, CardIsNotAvailableOrAffordableException, InvalidMoveException, Letter, Move, OpenedPositionException, UsedLetterException}
 import javax.inject._
 import play.api.mvc._
 import play.api.libs.json._
@@ -16,7 +16,9 @@ import sun.util.logging.PlatformLogger
 
 @Singleton
 class GameController @Inject()(cc: ControllerComponents, gameService: GameService) extends AbstractController(cc) {
-
+  /* implicit val letterWriter = Json.writes[Letter]
+   implicit val cardWriter = Json.writes[Card]
+   implicit val moveWriter = Json.writes[Move]*/
   implicit val levelReads: Reads[Level] =
     (JsPath \ "level").read[Int].map(Level.apply)
 
@@ -25,49 +27,42 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
       (JsPath \ "level1").write[Int]
     ) (unlift(Level.unapply))*/
 
- /* implicit val cardWriters: Writes[Card] = (
-    (JsPath \ "name").write[String] and
-      (JsPath \ "cost").write[Int] and
-      (JsPath \ "availableCount").write[Int]
-    ) (unlift(Card.unapply))*/
 
   implicit val letterWriters: Writes[Letter] = (
     (__ \ "l").write[String] and
       (__ \ "c").write[Int]
     ) (unlift(Letter.unapply))
-
-
-  implicit val moveWriters: Writes[Move] = (
-    (JsPath \ "letter").writeNullable[Letter] and
-      (JsPath \ "cardName").writeNullable[String] and
-      (JsPath \ "result").writeNullable[Boolean]
-    ) (unlift(Models.Move.unapply))
-
-  /* implicit val letterWriter = Json.writes[Letter]
-   implicit val cardWriter = Json.writes[Card]
-   implicit val moveWriter = Json.writes[Move]*/
-
-
-  /*implicit val cardReads: Reads[Card] = (
-    (JsPath \ "name").read[String] and
-      (JsPath \ "cost").read[Int] and
-      (JsPath \ "availableCount").read[Int]
-    ) (Card.apply _)*/
-
   implicit val letterReads: Reads[Letter] = (
     (JsPath \ "l").read[String] and
       (JsPath \ "c").read[Int]
     ) (Letter.apply _)
 
-  implicit val moveReads: Reads[Move] = (
-    (JsPath \ "letter").readNullable[Letter] and
-      (JsPath \ "cardName").readNullable[String] and
-      (JsPath \ "result").readNullable[Boolean]
-    ) (Models.Move.apply _)
+  /* implicit val cardWriters: Writes[Card] = (
+     (JsPath \ "name").write[String] and
+       (JsPath \ "cost").write[Int] and
+       (JsPath \ "availableCount").write[Int]
+     ) (unlift(Card.unapply))
+   implicit val cardReads: Reads[Card] = (
+     (JsPath \ "name").read[String] and
+       (JsPath \ "cost").read[Int] and
+       (JsPath \ "availableCount").read[Int]
+     ) (Card.apply _)*/
+
+
+  /* implicit val moveWriters: Writes[Move] = (
+     (JsPath \ "letter").writeNullable[Letter] and
+       (JsPath \ "cardName").writeNullable[String] and
+       (JsPath \ "result").writeNullable[Boolean]
+     ) (unlift(Models.Move.unapply))
+   implicit val moveReads: Reads[Move] = (
+     (JsPath \ "letter").readNullable[Letter] and
+       (JsPath \ "cardName").readNullable[String] and
+       (JsPath \ "result").readNullable[Boolean]
+     ) (Models.Move.apply _)*/
 
   implicit val guessReads: Reads[Guess] = (
     (JsPath \ "letter").readNullable[String] and
-      (JsPath \ "card").readNullable[String] and
+      (JsPath \ "cardName").readNullable[String] and
       (JsPath \ "position").readNullable[Int]
     ) (Guess.apply _)
 
@@ -91,7 +86,7 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
 
   }
 
-  def getAlphabet=Action{
+  def getAlphabet = Action {
     Ok("hello")
   }
 
@@ -102,32 +97,28 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
         BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))
       },
       guess => {
-        gameService.currentGame.get.makeANewGuess(Some(gameService.currentGame.get.alphabet1(guess.letter.get.head)),None,guess.position)
-        Ok(gameService.currentGame.get.Point.toString)
+        try {
+          gameService.makeANewGuess(guess.letter, guess.cardName, guess.position)
+          Ok(gameService.currentGame.get.Point.toString)
+        }
+        catch {
+          case ex: ActiveCardException => println("There is a active card")
+            Ok("There is a active card")
+          case ex: UsedLetterException => println("This letter already choosed")
+            Ok("This letter already choosed")
+          case ex: OpenedPositionException => println("Position already opened")
+            Ok("Position already opened")
+          case ex: CardIsNotAvailableOrAffordableException => println("Card isn't available or affordable! Make a new guess")
+            Ok("Card isn't available or affordable! Make a new guess")
+          case ex: InvalidMoveException => println("Invalid move")
+            Ok("Invalid move")
 
+        }
+        ///gameService.currentGame.get.alphabet1(guess.letter.get.letter.head)
       }
     )
   }
 
-  def listMoves = Action {
-    val json = Json.toJson(Move.list)
-    Ok(json)
-  }
-
-  def saveMove = Action(parse.json) { request =>
-    val moveResult = request.body.validate[Move]
-    moveResult.fold(
-      errors => {
-        BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))
-      },
-      move => {
-        Move.addMove(move)
-       // gameService.currentGame.get.makeANewGuess(move.letter,gameService.currentGame.get.cards.find(c => c.name==move.cardName),None)
-        Ok(Json.obj("status" -> "OK", "message" -> ("Move saved"))+gameService.currentGame.get.Point.toString)
-      }
-    )
-
-  }
 
   def deneme = Action {
     gameService.createANewGame(1)
@@ -137,16 +128,18 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
 
 case class Level(level: Int) {}
 
-case class Guess(letter: Option[String], cardName:Option[String], position: Option[Int])
+case class Guess(letter: Option[String], cardName: Option[String], position: Option[Int])
 
-object Move{
-  var list:List[Move] ={
+//case class Card(name: String, cost: Int, availableCount: Int)
+
+object Move {
+  var list: List[Move] = {
     List(
 
     )
   }
 
-  def addMove(move:Move): Unit ={
+  def addMove(move: Move): Unit = {
     list = list ::: List(move)
   }
 }

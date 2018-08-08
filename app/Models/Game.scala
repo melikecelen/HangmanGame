@@ -1,20 +1,21 @@
 package Models
 
-import scala.collection.mutable
+import scala.collection.{mutable,immutable}
 import scala.collection.mutable.ListBuffer
 
-class Game(level: Int, word: Word, cardList: List[Card],alphabet: mutable.HashMap[Char,Letter]) {
+class Game(level: Int, word: Word, cardHashMap: immutable.HashMap[String,Card], alphabet: mutable.HashMap[Char,Letter]) {
 
   var Point: Int = 100
   val alphabet1:mutable.HashMap[Char,Letter] = alphabet
-  val cards:List[Card] = cardList
+ // val cards:List[Card] = cardList
   val moves = ListBuffer[Move]()
   val usedCards = ListBuffer[Card]()
 
-  // println(word.name + "->" + word.category)
+   println(word.name + "->" + word.category)
 
   def makeANewGuess(letter: Option[Letter], card: Option[Card], position: Option[Int]): Unit = {
    // try {
+
       if (!isGameFinished()) {
         if (card.isDefined) {
           if (card.get.isCardAvailable(usedCards) && card.get.isCardAffordable(Point)) {
@@ -58,10 +59,11 @@ class Game(level: Int, word: Word, cardList: List[Card],alphabet: mutable.HashMa
           }
           else throw new CardIsNotAvailableOrAffordableException()
         }
+
         else if (letter.isDefined && position.isEmpty) {
           if (!moves.exists(m => m.letter == letter)) {
             if (checkLastMove()) {
-              moves.last.cardName.get match {
+              moves.last.card.get.name match {
                 case "Risk" => createAMove(letter, card, 0)
                 case "Consolation" => createAMove(letter, card, letter.get.cost / 2)
               }
@@ -105,15 +107,14 @@ class Game(level: Int, word: Word, cardList: List[Card],alphabet: mutable.HashMa
 
   def createAMove(letter: Option[Letter], card: Option[Card], cost: Int) {
     if (!word.isLetterExist(letter.get)) {
-      moves += Move(letter, /*Some(card.get.name)*/None, Some(false))
+      moves += Move(letter, card, Some(false))
       Point = reducePoint(cost)
     }
-    else moves += Move(letter, /*Some(card.get.name)*/None, Some(true))
+    else moves += Move(letter, card, Some(true))
   }
 
-  def checkLastMove(): Boolean = {
-    moves.nonEmpty && moves.last.cardName.isDefined && ((moves.last.cardName.get == "Risk" && moves.last.result.get) ||
-      (moves.last.cardName.get == "Consolation" && !moves.last.result.get))
-  }
+  def checkLastMove(): Boolean = moves.nonEmpty && moves.last.card.isDefined &&
+    ((moves.last.card.get.name == "Risk" && moves.last.result.get) ||
+      (moves.last.card.get.name == "Consolation" && !moves.last.result.get))
 
 }

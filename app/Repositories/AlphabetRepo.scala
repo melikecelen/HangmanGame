@@ -14,11 +14,11 @@ class AlphabetRepo @Inject()(configuration: Configuration){
   var alphabetMap: mutable.HashMap[Char, Letter] = mutable.HashMap.empty
 
   alphabet.forEach(confObj => {
-    val letter = confObj.toConfig.getString("letter").charAt(0) //atKey("letter")
+    val letter = confObj.toConfig.getString("letter") //atKey("letter")
     val cost = confObj.toConfig.getInt("cost") //atKey("cost")
    // alphabetMap(letter)=cost
-    alphabetMap += letter -> new Letter(letter.toString,cost)
-    println(alphabetMap(letter).letter)
+    alphabetMap += letter.head -> new Letter(letter,cost)
+    println(alphabetMap(letter.head).letter)
     //letter -> cost
   })
 

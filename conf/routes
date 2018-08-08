@@ -18,8 +18,6 @@ POST /createANewGame                controllers.GameController.startANewGame
 
 GET /selam  controllers.GameController.deneme
 
-GET     /move                          controllers.GameController.listMoves
-POST     /move                          controllers.GameController.saveMove
 
 GET /alphabet   controllers.GameController.getAlphabet
 

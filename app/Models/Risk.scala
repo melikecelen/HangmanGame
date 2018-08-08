@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-case class Risk @Inject()(configuration: Configuration) extends Card {
+class Risk @Inject()(configuration: Configuration) extends Card {
 
   val name: String = configuration.underlying.getString("cards.Risk.name")
   val cost: Int = configuration.underlying.getInt("cards.Risk.cost")
