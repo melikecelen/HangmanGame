@@ -13,5 +13,6 @@ class CardRepo @Inject()(configuration: Configuration, category: Category,
     val cardList = List[Card](category,consolation,buyALetter,discount,risk)
     cardList
   }
+  //configuration.underlying.getObject("cards.Category")
 
 }

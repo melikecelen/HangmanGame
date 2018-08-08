@@ -1,6 +1,6 @@
 package Models
 
-case class Letter(l:Char,c:Int) {
+case class Letter(l:String,c:Int) {
   val letter=l
   val cost=c
 }

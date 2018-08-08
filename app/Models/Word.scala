@@ -27,7 +27,7 @@ class Word(wordName:String, categoryName:String) {
     var a: Int = -1
     /* if(wordName.indexOf(0)==l.letter)
        positions+=a+1*/
-    for (c <- wordName if c == l.letter) {
+    for (c <- wordName if c == l.letter.head) {
       a = wordName.indexOf(c, a+1)
       positions += a
     }
