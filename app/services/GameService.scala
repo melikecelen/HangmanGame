@@ -16,6 +16,7 @@ class GameService @Inject()(wordService: WordService, cardService: CardService, 
     currentGame = Some(new Game(level, wordService.getRandomWord(level), cardService.getCards(),alphabetService.getAlphabet()))
   }
 
+  //TODO: If you do not return anything from here how are you going to pass game state to the UI?
   def makeANewGuess(letter: Option[String], cardName: Option[String], position: Option[Int]){
     if (currentGame.isDefined) {
       if (currentGame.get.isGameFinished()) {
