@@ -16,6 +16,11 @@ import sun.util.logging.PlatformLogger
 
 @Singleton
 class GameController @Inject()(cc: ControllerComponents, gameService: GameService) extends AbstractController(cc) {
+  
+  //TODO : Remove commented lines...
+  
+  //TODO : Move the JSON formatters to a seperate package object...  
+  
   /* implicit val letterWriter = Json.writes[Letter]
    implicit val cardWriter = Json.writes[Card]
    implicit val moveWriter = Json.writes[Move]*/
@@ -76,6 +81,7 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
         BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))
       },
       level => {
+        //TODO : Why check the current game status here? Isn't it better to do it in GameService?
         if (gameService.currentGame.isEmpty) {
           gameService.createANewGame(level.level)
           Ok(Json.obj("status" -> "OK", "message" -> ("Game created")))
@@ -99,6 +105,8 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
       guess => {
         try {
           gameService.makeANewGuess(guess.letter, guess.cardName, guess.position)
+          // TODO: Do you only pass the remaining point of the user to the UI? What about all the other state
+          // (used letters, word status, used cards, etc)?
           Ok(gameService.currentGame.get.Point.toString)
         }
         catch {
