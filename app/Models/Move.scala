@@ -1,6 +1,6 @@
 package Models
 
-case class Move(letter: Option[Letter], card: Option[Card], result: Option[Boolean]) {
+case class Move(letter: Option[Letter], card: Option[String], result: Option[Boolean],secretWord:String,point:Int,catName:Option[String]) {
 
 
 }

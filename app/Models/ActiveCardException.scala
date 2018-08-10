@@ -6,4 +6,4 @@ class OpenedPositionException extends Exception{}
 class CardIsNotAvailableOrAffordableException extends Exception{}
 class InvalidMoveException extends Exception{}
 
-
+class GameFinishedException extends Exception{}

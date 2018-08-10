@@ -41,12 +41,23 @@ class Word(wordName:String, categoryName:String) {
   def isAllPositionsRevealed(): Boolean = visibility.exists(_ != true)
 
 
-  def showWord(): Unit = {
+  def showWord(){
     for (i <- 0 until  wordName.length) {
       if (visibility(i) == false)
         print("_ ")
       else print(wordName(i))
     }
+  }
+
+  def getSecretWord():String ={
+    var secretword:Array[Char]=new Array[Char](wordName.length)
+    for(i<-0 until wordName.length){
+      if(visibility(i)==false){
+        secretword(i)='*'
+      }
+      else secretword(i)=wordName(i)
+    }
+    secretword.mkString
   }
 
   def findSpace(): Unit ={

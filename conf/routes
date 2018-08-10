@@ -16,9 +16,9 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 POST /createANewGame                controllers.GameController.startANewGame
 #GET /createANewGame                controllers.GameController.startANewGame
 
-GET /selam  controllers.GameController.deneme
+#GET /selam  controllers.GameController.deneme
 
 
-GET /alphabet   controllers.GameController.getAlphabet
+#GET /alphabet   controllers.GameController.getAlphabet
 
 POST  /guess            controllers.GameController.makeANewGuess

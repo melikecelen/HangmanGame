@@ -18,7 +18,7 @@ class AlphabetRepo @Inject()(configuration: Configuration){
     val cost = confObj.toConfig.getInt("cost") //atKey("cost")
    // alphabetMap(letter)=cost
     alphabetMap += letter.head -> new Letter(letter,cost)
-    println(alphabetMap(letter.head).letter)
+   // println(alphabetMap(letter.head).letter)
     //letter -> cost
   })
 
