@@ -4,30 +4,30 @@ import Models._
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
-import scala.collection.mutable
-
-
 @Singleton
 class GameService @Inject()(wordService: WordService, cardService: CardService, alphabetService: AlphabetService, configuration: Configuration) {
 
   var currentGame: Option[Game] = None
 
   def createANewGame(level: Int, point:Int = configuration.underlying.getInt("point")) = {
-    currentGame = Some(new Game(level, wordService.getRandomWord(level), cardService.getCards(), alphabetService.getAlphabet(),point))
+    if (level<=3 && level>=1) {
+      currentGame = Some(new Game(level, wordService.getRandomWord(level), cardService.getCards(), alphabetService.getAlphabet(), point))
+    }
   }
 
-  def makeANewGuess(letter: Option[String], cardName: Option[String], position: Option[Int]): Option[Move] = {
+  def makeANewGuess(letter: Option[String], cardName: Option[String], position: Option[Int]): Option[MoveResult] = {
+    if (!isMoveValid(letter, cardName,position)) throw new InvalidMoveException()
     if (currentGame.isDefined) {
-      if (currentGame.get.isGameFinished()) {
+      if (currentGame.get.isGameFinished().finished) {
         currentGame = None
         None
       }
       else {
-        val newMove: Option[Move] = currentGame.get.makeANewGuess(findLetter(letter), findCard(cardName), position)
+        val newMove: Option[MoveResult] = currentGame.get.makeANewGuess(findLetter(letter), findCard(cardName), position)
         newMove
       }
     }
-    else throw new Exception("No game no cry")
+    else throw new GameFinishedException
   }
 
   def findCard(cardName: Option[String]): Option[Card] = {
@@ -46,5 +46,19 @@ class GameService @Inject()(wordService: WordService, cardService: CardService, 
     else None
   }
 
-
+  def isMoveValid(letter: Option[String], card: Option[String], position: Option[Int]): Boolean = {
+    if (letter.isDefined && card.isDefined && position.isEmpty) {
+      if (card.get == "Consolation" || card.get == "Discount" || card.get == "Risk")
+        return true
+    }
+    else if (letter.isEmpty && card.isDefined && position.isDefined) {
+      if (card.get == "Buy A Letter") return true
+    }
+    else if (letter.isEmpty && card.isDefined && position.isEmpty) {
+      if (card.get == "Category") return true
+    }
+    else if (letter.isDefined && card.isEmpty && position.isEmpty)
+      return true
+    false
+  }
 }

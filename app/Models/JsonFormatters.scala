@@ -22,6 +22,15 @@ trait JsonFormatters {
       (JsPath \ "c").read[Int]
     ) (Letter.apply _)
 
+  implicit val gameStateWriters: Writes[GameState] = (
+    (__ \ "finished").write[Boolean] and
+      (__ \ "message").write[String]
+    ) (unlift(GameState.unapply))
+  implicit val gameStateReads: Reads[GameState] = (
+    (JsPath \ "finished").read[Boolean] and
+      (JsPath \ "message").read[String]
+    ) (GameState.apply _)
+
   implicit val guessReads: Reads[Guess] = (
     (JsPath \ "letter").readNullable[String] and
       (JsPath \ "cardName").readNullable[String] and
@@ -32,24 +41,31 @@ trait JsonFormatters {
     (JsPath \ "letter").writeNullable[String] and
       (JsPath \ "cardName").writeNullable[String] and
       (JsPath \ "position").writeNullable[Int]
-    )(unlift(Guess.unapply))
+    ) (unlift(Guess.unapply))
 
-   implicit val moveWriters: Writes[Move] = (
-   (JsPath \ "letter").writeNullable[Letter] and
-     (JsPath \ "card").writeNullable[String] and
-     (JsPath \ "result").writeNullable[Boolean] and
-       (JsPath \ "secretWord").write[String] and
-         (JsPath \ "point").write[Int]and
-           (JsPath \ "catName").writeNullable[String]
+  implicit val moveWriters: Writes[MoveResult] = (
+    (JsPath \ "letter").writeNullable[Letter] and
+      (JsPath \ "card").writeNullable[String] and
+      (JsPath \ "result").writeNullable[Boolean] and
+      (JsPath \ "secretWord").write[String] and
+      (JsPath \ "point").write[Int] and
+      (JsPath \ "catName").writeNullable[String] and
+      (JsPath \ "gameState").write[GameState]
 
-     ) (unlift(Models.Move.unapply))
- implicit val moveReads: Reads[Move] = (
-   (JsPath \ "letter").readNullable[Letter] and
-     (JsPath \ "card").readNullable[String] and
-     (JsPath \ "result").readNullable[Boolean] and
-       (JsPath \ "secretWord").read[String] and
-         (JsPath \ "point").read[Int]and
-           (JsPath \ "catName").readNullable[String]
+    ) (unlift(Models.MoveResult.unapply))
+  implicit val moveReads: Reads[MoveResult] = (
+    (JsPath \ "letter").readNullable[Letter] and
+      (JsPath \ "card").readNullable[String] and
+      (JsPath \ "result").readNullable[Boolean] and
+      (JsPath \ "secretWord").read[String] and
+      (JsPath \ "point").read[Int] and
+      (JsPath \ "catName").readNullable[String] and
+      (JsPath \ "gameState").read[GameState]
 
-   ) (Models.Move.apply _)
+    ) (Models.MoveResult.apply _)
+
+
+
+
+
 }

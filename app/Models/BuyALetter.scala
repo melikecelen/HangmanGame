@@ -2,6 +2,8 @@ package Models
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
+
+import scala.collection.mutable.ListBuffer
 @Singleton
 class BuyALetter @Inject()(configuration: Configuration) extends Card {
   val name: String = configuration.underlying.getString("cards.BuyALetter.name")
@@ -11,4 +13,14 @@ class BuyALetter @Inject()(configuration: Configuration) extends Card {
   override def isCardAffordable(point: Int): Boolean = {
     if (point >= 20) true else false
   }
+def useBuyALetter(word: Word,position:Int) {
+  if (!word.visibility(position)) {
+    word.visibility(position) = true
+
+  } else {
+   // usedCards.drop(usedCards.length - 1)
+    throw new OpenedPositionException()
+  }
+}
+
 }
