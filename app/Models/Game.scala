@@ -58,22 +58,6 @@ class Game(level: Int, word: Word, cardHashMap: immutable.HashMap[String, Card],
     else GameState(finished = false, "Continue")
   }
 
-  def isMoveValid(letter: Option[Letter], card: Option[Card], position: Option[Int]): Boolean = {
-    if (letter.isDefined && card.isDefined && position.isEmpty) {
-      if (card.get.name == "Consolation" || card.get.name == "Discount" || card.get.name == "Risk")
-        return true
-    }
-    else if (letter.isEmpty && card.isDefined && position.isDefined) {
-      if (card.get.name == "Buy A Letter") return true
-    }
-    else if (letter.isEmpty && card.isDefined && position.isEmpty) {
-      if (card.get.name == "Category") return true
-    }
-    else if (letter.isDefined && card.isEmpty && position.isEmpty)
-      return true
-    false
-  }
-
   def createAMove(letter: Option[Letter], cardName: Option[String], cost: Option[Int]): Option[MoveResult] = {
     val gameState = isGameFinished()
     if (letter.isEmpty) {
@@ -82,7 +66,6 @@ class Game(level: Int, word: Word, cardHashMap: immutable.HashMap[String, Card],
     else if (!word.isLetterExist(letter.get)) {
       Point = reducePoint(cost.get)
       moves += MoveResult(letter, cardName, Some(false), word.getSecretWord(), Point, categoryName, gameState)
-      //Some(Move(letter, card, Some(false),word.getSecretWord))
     }
     else moves += MoveResult(letter, cardName, Some(true), word.getSecretWord(), Point, categoryName, gameState)
     println(Point)
