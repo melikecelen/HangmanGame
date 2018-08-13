@@ -2,7 +2,7 @@ import play.api.libs.json.{JsNull, Json}
 import play.api.test.{FakeRequest}
 import play.api.test.Helpers._
 
-class MakingAGuessTest extends HangmanTest {  //with injecting diye bi şey var
+class MakingAGuessTest extends HangmanTest {
   "GameController POST" should {
     "make a new guess with letter" in {
       //val controller = app.injector.instanceOf[HomeController]
