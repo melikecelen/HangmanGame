@@ -12,9 +12,5 @@ class HangmanTest extends PlaySpec with OneAppPerTest {
 
   def createAGame(level: Int, point: Int, moves: Option[ListBuffer[MoveResult]], usedCards: Option[ListBuffer[Card]]): Unit = {
     val game = service.createANewGame(level, point)
-    if (moves.isDefined)
-      Some(service.currentGame.get.moves) = moves.get
-    if (usedCards.isDefined)
-      Some(service.currentGame.get.usedCards) = usedCards.get
   }
 }

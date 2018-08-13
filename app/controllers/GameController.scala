@@ -1,7 +1,8 @@
 package controllers
 
-import Models._
+import java.io.FileNotFoundException
 
+import Models._
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AbstractController, ControllerComponents}
 import services.GameService
@@ -16,8 +17,13 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
         BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))
       },
       level => {
+        try {
           gameService.createANewGame(level.level)
           Ok(Json.obj("status" -> "OK", "message" -> ("Game created")))
+        }
+        catch {
+          case ex: FileNotFoundException => Ok(Json.obj("status" -> "KO", "message" -> "Word files not found"))
+        }
       }
     )
   }
@@ -30,22 +36,22 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
       },
       guess => {
         try {
-          val newMove:Option[MoveResult]=gameService.makeANewGuess(guess.letter, guess.cardName, guess.position)
+          val newMove: Option[MoveResult] = gameService.makeANewGuess(guess.letter, guess.cardName, guess.position)
           Ok(Json.obj("status" -> "OK", "message" -> Json.toJson(newMove.get)))
         }
         catch {
           case ex: ActiveCardException => println("There is a active card")
-            Ok(Json.obj("status" -> "OK", "message" ->"There is a active card"))
+            Ok(Json.obj("status" -> "OK", "message" -> "There is a active card"))
           case ex: UsedLetterException => println("This letter already choosed")
-            Ok(Json.obj("status" -> "OK", "message" ->"This letter already choosed"))
+            Ok(Json.obj("status" -> "OK", "message" -> "This letter already choosed"))
           case ex: OpenedPositionException => println("Position already opened")
-            Ok(Json.obj("status" -> "OK", "message" ->"Position already opened"))
+            Ok(Json.obj("status" -> "OK", "message" -> "Position already opened"))
           case ex: CardIsNotAvailableOrAffordableException => println("Card isn't available or affordable! Make a new guess")
-            Ok(Json.obj("status" -> "OK", "message" ->"Card isn't available or affordable! Make a new guess"))
+            Ok(Json.obj("status" -> "OK", "message" -> "Card isn't available or affordable! Make a new guess"))
           case ex: InvalidMoveException => println("Invalid move")
-            Ok(Json.obj("status" -> "OK", "message" ->"Invalid move"))
+            Ok(Json.obj("status" -> "OK", "message" -> "Invalid move"))
           case ex: GameFinishedException => println("Game finished")
-            Ok(Json.obj("status" -> "KO", "message" ->"There is no game, please start a new game!"))
+            Ok(Json.obj("status" -> "KO", "message" -> "There is no game, please start a new game!"))
         }
       }
     )
