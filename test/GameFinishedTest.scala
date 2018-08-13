@@ -7,7 +7,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 class GameFinishedTest extends HangmanTest {
-  "making a guess with used (non-usable) letter" in {
+ "The application finishes by revealing the secret word completely" in {
     val moves: ListBuffer[MoveResult] = new mutable.ListBuffer[MoveResult]
     moves += new MoveResult(Some(service.alphabet('b')), None, Some(true), "butterfl*", 10, None, new GameState(false, "Continue"))
     val word:Word =new Word("butterfly", "animal")
