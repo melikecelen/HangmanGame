@@ -1,0 +1,94 @@
+body{
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+nav{
+    display:flex;
+    border:solid;
+    border-color:coral;
+}
+nav ul{
+    display: flex;
+}
+nav ul li{
+    display: flex;
+    justify-content:center;
+    padding: 10%;
+    margin: 10%;
+    padding-right: 20%;
+    padding-left: 20%;
+    margin-right: 2%;
+    border: solid;
+    border-color: rgb(100,120,200);
+}
+#container{
+    display: flex;
+    flex-direction: column;
+    border: solid;
+    border-color: rgb(0,255,0);
+}
+#container #top-of-container{
+    display: flex;
+    border: solid;
+    justify-content: space-around;
+    margin: 3%;
+    padding: 2%;
+}
+#container #state-and-giveup{
+    display: flex;
+    flex-direction: column;
+}
+#container #top-of-container #alphabet{
+    display: flex;
+    flex-wrap: wrap;
+    width:20%;
+    border: solid;
+    border-color: rgb(100,50,105);
+    padding: 1%;
+}
+#container #top-of-container #alphabet #letter-container{
+    display:flex;
+    justify-content: center;
+    flex-wrap:wrap;
+    padding:6%;
+}
+#container #top-of-container #alphabet button{
+    width:16%;
+    margin:2%;
+}
+#container #word-container{
+    display: flex;
+    flex-direction: column;
+    border: solid;
+    border-color: rgb(140,140,0);
+    margin: 3%;
+}
+#container #word-container #secret-letters{
+    display: flex;
+    justify-content: center;
+}
+#container #word-container #secret-letters h3{
+    display: flex;
+    justify-content: center;
+    padding-right:2%;
+}
+#container #card-container{
+    display: flex;
+    flex-direction: column;
+    border: solid;
+    border-color: rgb(0,0,200);
+    margin: 2%;
+}
+#container #card-container #cards{
+    display: flex;
+    justify-content: center;
+}
+#container #card-container #cards .card-button{
+    display: flex;
+    justify-content: center;
+    padding: 3%;
+    margin:1%;
+    width: 10%;
+}

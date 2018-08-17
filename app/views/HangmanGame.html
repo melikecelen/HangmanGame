@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="HangmanGame.css">
+    <script type="text/javascript" src="HangmanGame.js" defer></script>
+</head>
+<body  onload="makeButton()">
+<nav>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Info</a></li>
+    </ul>
+</nav>
+<div id="container">
+    <div id="top-of-container">
+        <div id="state-and-giveup">
+            <div id="state">
+                <p id="point">Point: </p>
+                <p>Category: ?</p>
+                <p>Active Card: Normal</p>
+            </div>
+            <div id="give-up">
+                <button>Give up</button>
+            </div>
+        </div>
+        <div id="alphabet">
+            <div id="letter-container">
+            </div>
+        </div>
+    </div>
+    <div id="word-container">
+        <div id="secret-letters">
+            <h3 id="secretword"></h3>
+
+        </div>
+    </div>
+    <div id="card-container">
+        <div id="cards">
+            <button class="card-button">Risk</button>
+            <button class="card-button">Consolation</button>
+            <button class="card-button">Discount</button>
+            <button class="card-button">Buy A Letter</button>
+            <button class="card-button">Category</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
