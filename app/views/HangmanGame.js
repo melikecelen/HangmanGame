@@ -23,10 +23,7 @@ function createANewGame(){
     }).then (response=>response.json()).then(function (data) {
         document.getElementById('secretword').textContent=data.secretWord;
         document.getElementById('point').textContent+=data.point;
-       // console.log(data.alphabet[0]);
         makeButton(data.alphabet);
-        console.log(data.message);
-
     })
 }
 createANewGame();
