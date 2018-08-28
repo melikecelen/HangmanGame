@@ -40,6 +40,9 @@ nav ul li{
     display: flex;
     flex-direction: column;
 }
+#point-container, #active-card-container #category-container{
+    display: flex;
+}
 #container #top-of-container #alphabet{
     display: flex;
     flex-wrap: wrap;
@@ -91,4 +94,12 @@ nav ul li{
     padding: 3%;
     margin:1%;
     width: 10%;
+}
+.usedLetterFalse{
+    background-color: #ff493d;
+    color: floralwhite;
+}
+.usedLetterTrue{
+    background-color: #65ee71;
+    color: floralwhite;
 }

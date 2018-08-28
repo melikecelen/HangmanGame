@@ -2,10 +2,11 @@
 <html>
 <head>
     <title></title>
+    <meta charset="utf-8"/>
     <link rel="stylesheet" type="text/css" href="HangmanGame.css">
     <script type="text/javascript" src="HangmanGame.js" defer></script>
 </head>
-<body  onload="makeButton()">
+<body>
 <nav>
     <ul>
         <li><a href="#">Home</a></li>
@@ -16,9 +17,18 @@
     <div id="top-of-container">
         <div id="state-and-giveup">
             <div id="state">
-                <p id="point">Point: </p>
-                <p>Category: ?</p>
-                <p>Active Card: Normal</p>
+                <div id="point-container">
+                    <h3>Point:
+                        <h3 id="point"></h3></h3>
+                </div>
+                <div id="category-container">
+                    <h3>Category:
+                        <h3 id="category"></h3></h3>
+                </div>
+                <div id="active-card-container">
+                    <h3>Active Card:
+                        <h3 id="active-card"></h3></h3>
+                </div>
             </div>
             <div id="give-up">
                 <button>Give up</button>
@@ -37,11 +47,6 @@
     </div>
     <div id="card-container">
         <div id="cards">
-            <button class="card-button">Risk</button>
-            <button class="card-button">Consolation</button>
-            <button class="card-button">Discount</button>
-            <button class="card-button">Buy A Letter</button>
-            <button class="card-button">Category</button>
         </div>
     </div>
 </div>

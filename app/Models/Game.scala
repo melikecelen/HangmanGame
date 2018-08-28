@@ -3,13 +3,14 @@ package Models
 import scala.collection.{immutable, mutable}
 import scala.collection.mutable.ListBuffer
 
-class Game(level: Int, word: Word, cardHashMap: immutable.HashMap[String, Card], alphabet: mutable.HashMap[Char, Letter], point: Int) {
+class Game(level: Int, word: Word, cardHashMap: immutable.HashMap[String, Card], alphabet: mutable.HashMap[Char, Letter],
+           point: Int, movesDefault: ListBuffer[MoveResult] = new mutable.ListBuffer[MoveResult], usedCardsDefault: ListBuffer[Card] = new mutable.ListBuffer[Card]) {
 
   var Point: Int = point
-   val moves = ListBuffer[MoveResult]()
-   val usedCards = ListBuffer[Card]()
+  val moves = movesDefault
+  val usedCards = usedCardsDefault
   private var categoryName: Option[String] = None
-
+  val gameWord: Word = word
   println(word.name + "->" + word.category)
 
   def makeANewGuess(letter: Option[Letter], card: Option[Card], position: Option[Int]): Option[MoveResult] = {
@@ -25,19 +26,20 @@ class Game(level: Int, word: Word, cardHashMap: immutable.HashMap[String, Card],
         usedCards += card.get
         if (letter.isDefined)
           return createAMove(letter, Some(card.get.name), Some((card.get.letterCostMultiplier * letter.get.cost).toInt))
-        else return return createAMove(letter, Some(card.get.name), None)
+        else return createAMove(letter, Some(card.get.name), None)
       } else throw new CardIsNotAvailableOrAffordableException
     }
     letter.flatMap { _ =>
-      if (checkLastMove()) {
-        if (!moves.exists(m => m.letter == letter)) {
+      if (!moves.exists(m => m.letter == letter)) {
+        if (checkLastMove()) {
+
           moves.last.card.get match {
             case "Risk" => return createAMove(letter, None, None)
             case "Consolation" => return createAMove(letter, None, Some(letter.get.cost / 2))
           }
         }
-        else throw new UsedLetterException()
-      }
+
+      } else throw new UsedLetterException()
       return createAMove(letter, None, Some(letter.get.cost))
     }
   }
@@ -59,15 +61,22 @@ class Game(level: Int, word: Word, cardHashMap: immutable.HashMap[String, Card],
   }
 
   def createAMove(letter: Option[Letter], cardName: Option[String], cost: Option[Int]): Option[MoveResult] = {
-    val gameState = isGameFinished()
+
     if (letter.isEmpty) {
+      val gameState = isGameFinished()
       moves += MoveResult(None, cardName, None, word.getSecretWord(), Point, categoryName, gameState)
     }
     else if (!word.isLetterExist(letter.get)) {
-      Point = reducePoint(cost.get)
+
+      if (cost.isDefined)
+        Point = reducePoint(cost.get)
+      val gameState = isGameFinished()
       moves += MoveResult(letter, cardName, Some(false), word.getSecretWord(), Point, categoryName, gameState)
     }
-    else moves += MoveResult(letter, cardName, Some(true), word.getSecretWord(), Point, categoryName, gameState)
+    else {
+      val gameState = isGameFinished()
+      moves += MoveResult(letter, cardName, Some(true), word.getSecretWord(), Point, categoryName, gameState)
+    }
     println(Point)
     Some(moves.last)
   }

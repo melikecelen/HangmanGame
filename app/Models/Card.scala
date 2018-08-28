@@ -4,13 +4,13 @@ package Models
 import scala.collection.mutable.ListBuffer
 
 
-abstract class Card{
-  val name: String
+case class Card(name: String,cost: Int,availableCount: Int,letterCostMultiplier: Double = 0){
+ /* val name: String
   val cost: Int
   val availableCount: Int
-  val letterCostMultiplier: Double = 0
+  val letterCostMultiplier: Double = 0*/
 
-  def isCardAffordable(p: Int): Boolean
+  def isCardAffordable(p: Int): Boolean={false}
 
   def isCardAvailable(usedCards:ListBuffer[Card]):Boolean={
     if(usedCards.count( c => c.name == this.name)<this.availableCount)

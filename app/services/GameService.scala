@@ -4,19 +4,34 @@ import Models._
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+
+
 @Singleton
 class GameService @Inject()(wordService: WordService, cardService: CardService, alphabetService: AlphabetService, configuration: Configuration) {
 
+  var alphabet = alphabetService.getAlphabet()
+  var cardList = cardService.getCards()
   var currentGame: Option[Game] = None
 
-  def createANewGame(level: Int, point:Int = configuration.underlying.getInt("point")) = {
-    if (level<=3 && level>=1) {
+  def createANewGame(level: Int, point: Int = configuration.underlying.getInt("point"),
+                     moves: ListBuffer[MoveResult] = new mutable.ListBuffer[MoveResult],
+                     usedCards: ListBuffer[Card] = new mutable.ListBuffer[Card]) = {
+    if (level <= 3 && level >= 1) {
       currentGame = Some(new Game(level, wordService.getRandomWord(level), cardService.getCards(), alphabetService.getAlphabet(), point))
     }
+    else throw new InvalidLevelException
   }
-
+  def createANewGameTest(level: Int, point: Int = configuration.underlying.getInt("point"),word: Word,
+                     moves: ListBuffer[MoveResult] = new mutable.ListBuffer[MoveResult],
+                     usedCards: ListBuffer[Card] = new mutable.ListBuffer[Card]) = {
+    if (level <= 3 && level >= 1) {
+      currentGame = Some(new Game(level,word, cardService.getCards(), alphabetService.getAlphabet(), point,moves,usedCards))
+    }
+  }
   def makeANewGuess(letter: Option[String], cardName: Option[String], position: Option[Int]): Option[MoveResult] = {
-    if (!isMoveValid(letter, cardName,position)) throw new InvalidMoveException()
+    if (!isMoveValid(letter, cardName, position)) throw new InvalidMoveException()
     if (currentGame.isDefined) {
       if (currentGame.get.isGameFinished().finished) {
         currentGame = None

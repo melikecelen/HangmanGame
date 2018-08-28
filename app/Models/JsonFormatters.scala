@@ -7,6 +7,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.functional.syntax.unlift
 import play.api.libs.json.Reads._
 
+import scala.collection.mutable
+
 @Singleton
 trait JsonFormatters {
   implicit val levelReads: Reads[Level] =
@@ -14,12 +16,12 @@ trait JsonFormatters {
 
 
   implicit val letterWriters: Writes[Letter] = (
-    (__ \ "l").write[String] and
-      (__ \ "c").write[Int]
+    (__ \ "letter").write[String] and
+      (__ \ "cost").write[Int]
     ) (unlift(Letter.unapply))
   implicit val letterReads: Reads[Letter] = (
-    (JsPath \ "l").read[String] and
-      (JsPath \ "c").read[Int]
+    (JsPath \ "letter").read[String] and
+      (JsPath \ "cost").read[Int]
     ) (Letter.apply _)
 
   implicit val gameStateWriters: Writes[GameState] = (
@@ -63,6 +65,28 @@ trait JsonFormatters {
       (JsPath \ "gameState").read[GameState]
 
     ) (Models.MoveResult.apply _)
+
+ // Card(name: String,cost: Int,availableCount: Int,letterCostMultiplier: Double = 0)
+  implicit val cardWriters: Writes[Card]=(
+    (JsPath \ "name").write[String] and
+      (JsPath \ "cost").write[Int] and
+      (JsPath \ "availableCount").write[Int] and
+      (JsPath \ "letterCostMultiplier").write[Double]
+    )(unlift(Models.Card.unapply))
+  implicit val cardReads: Reads[Card]=(
+    (JsPath \ "name").read[String] and
+      (JsPath \ "cost").read[Int] and
+      (JsPath \ "availableCount").read[Int] and
+      (JsPath \ "letterCostMultiplier").read[Double]
+    )(Models.Card.apply _)
+
+  implicit val createResposeWriters:Writes[GameCreatedResponse]=(
+    (JsPath \ "wordName").write[String] and
+      (JsPath \ "category").write[String] and
+      (JsPath \ "alphabet").write[mutable.HashMap[String,Letter]]
+  )(unlift(GameCreatedResponse.unapply))
+
+
 
 
 
