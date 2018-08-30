@@ -4,7 +4,7 @@ package Models
 import scala.collection.mutable.ListBuffer
 
 
-case class Card(name: String,cost: Int,availableCount: Int,letterCostMultiplier: Double = 0){
+case class Card(name: String,cost: Int,availableCount: Int,letterCostMultiplier: Double = 0,minPoint:Int,maxPoint:Int){
  /* val name: String
   val cost: Int
   val availableCount: Int

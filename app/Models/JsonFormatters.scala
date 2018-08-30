@@ -71,13 +71,17 @@ trait JsonFormatters {
     (JsPath \ "name").write[String] and
       (JsPath \ "cost").write[Int] and
       (JsPath \ "availableCount").write[Int] and
-      (JsPath \ "letterCostMultiplier").write[Double]
+      (JsPath \ "letterCostMultiplier").write[Double] and
+      (JsPath \ "minPoint").write[Int] and
+      (JsPath \ "maxPoint").write[Int]
     )(unlift(Models.Card.unapply))
   implicit val cardReads: Reads[Card]=(
     (JsPath \ "name").read[String] and
       (JsPath \ "cost").read[Int] and
       (JsPath \ "availableCount").read[Int] and
-      (JsPath \ "letterCostMultiplier").read[Double]
+      (JsPath \ "letterCostMultiplier").read[Double] and
+      (JsPath \ "minPoint").read[Int] and
+      (JsPath \ "maxPoint").read[Int]
     )(Models.Card.apply _)
 
   implicit val createResposeWriters:Writes[GameCreatedResponse]=(

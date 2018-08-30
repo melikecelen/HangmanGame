@@ -1,105 +1,268 @@
-body{
+body {
     display: flex;
     flex-direction: column;
     margin-left: 5%;
     margin-right: 5%;
 }
-nav{
-    display:flex;
-    border:solid;
-    border-color:coral;
+nav {
+    display: flex;
+    border-color: coral;
 }
-nav ul{
+nav ul {
     display: flex;
 }
-nav ul li{
+nav ul li {
     display: flex;
-    justify-content:center;
-    padding: 10%;
-    margin: 10%;
-    padding-right: 20%;
-    padding-left: 20%;
-    margin-right: 2%;
+    justify-content: center;
     border: solid;
-    border-color: rgb(100,120,200);
+    border-color: #f0d5b5;
 }
-#container{
+nav ul li button{
+    font-family: "Bitstream Vera Sans Mono";
+    font-weight: bold;
+    box-shadow: 5px 5px #9e8775;
+    text-align: center;
+    font-size: 16px;
+    transition: all 0.5s;
+    background-color: #ffe4c2;
+}
+nav ul li a {
     display: flex;
+}
+#container {
+    display: none;
     flex-direction: column;
-    border: solid;
-    border-color: rgb(0,255,0);
 }
-#container #top-of-container{
+#container #top-of-container {
     display: flex;
-    border: solid;
     justify-content: space-around;
-    margin: 3%;
-    padding: 2%;
-}
-#container #state-and-giveup{
-    display: flex;
-    flex-direction: column;
-}
-#point-container, #active-card-container #category-container{
-    display: flex;
-}
-#container #top-of-container #alphabet{
-    display: flex;
-    flex-wrap: wrap;
-    width:20%;
-    border: solid;
-    border-color: rgb(100,50,105);
+    margin: 1%;
     padding: 1%;
 }
-#container #top-of-container #alphabet #letter-container{
-    display:flex;
-    justify-content: center;
-    flex-wrap:wrap;
-    padding:6%;
-}
-#container #top-of-container #alphabet button{
-    width:16%;
-    margin:2%;
-}
-#container #word-container{
+#container #state-and-giveup {
     display: flex;
+    justify-content: center;
     flex-direction: column;
-    border: solid;
-    border-color: rgb(140,140,0);
-    margin: 3%;
+    color: #d25d16;
+    cursor: default;
+
 }
-#container #word-container #secret-letters{
+#container #state-and-giveup #give-up button {
+    display: flex;
+    background-color: #e43737;
+    color: #681d1d;
+    box-shadow: 5px 5px #681d1d;
+    border: none;
+    cursor: pointer;
+
+    border-radius: 20px;
+    justify-content: center;
+    padding: 10%;
+    margin: 15%;
+}
+#point-container, #active-card-container #category-container {
+    display: flex;
+}
+#container #top-of-container #alphabet {
+    display: flex;
+    flex-wrap: wrap;
+    width: 35%;
+    padding: 1%;
+}
+#container #top-of-container #alphabet #letter-container {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    padding: 6%;
 }
-#container #word-container #secret-letters h3{
-    display: flex;
-    justify-content: center;
-    padding-right:2%;
-}
-#container #card-container{
-    display: flex;
-    flex-direction: column;
-    border: solid;
-    border-color: rgb(0,0,200);
+#container #top-of-container #alphabet button {
+    width: 20%;
+    height: 10%;
     margin: 2%;
+
+    border-radius: 4px;
+    background-color: #fff69b;
+    border: none;
+    color: #a9a059;
+    box-shadow: 3px 3px #cec56e;
+    text-align: center;
+    font-size: 16px;
+    transition: all 0.5s;
+    cursor: pointer;
 }
-#container #card-container #cards{
+#container #top-of-container #alphabet button:disabled {
+    background-color: #dcd37d;
+    color: #d6d5d5;
+    box-shadow: 3px 3px #726b6b;
+    cursor: not-allowed;
+}
+#container #word-container {
+    display: flex;
+    flex-direction: column;
+    margin: 1%;
+}
+#container #word-container #secret-letters {
     display: flex;
     justify-content: center;
 }
-#container #card-container #cards .card-button{
+#container #word-container #secret-letters h3 {
     display: flex;
     justify-content: center;
+    padding-right: 2%;
+}
+#container #card-container {
+    display: flex;
+    flex-direction: column;
+    margin: 1%;
+}
+#container #card-container #cards {
+    display: flex;
+    justify-content: center;
+}
+#container #card-container #cards .tooltip{
+    width: 2%;
+    height: 10%;
+}
+#container #card-container #cards .card-button {
+    display: flex;
+    flex-direction: column;
+
     padding: 3%;
-    margin:1%;
+    margin: 1%;
     width: 10%;
+    border-radius: 20px;
+    background-color: #df8d4b;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    transition: all 0.25s;
+    cursor: pointer;
+    box-shadow: 8px 8px #a85d45;
+    color: floralwhite;
 }
-.usedLetterFalse{
+#container #card-container #cards .card-button:disabled {
+    background-color: #b4b4b4;
+    color: #d6d5d5;
+    box-shadow: 8px 8px #726b6b;
+    cursor: not-allowed;
+}
+#container #top-of-container #alphabet .usedLetterFalse:disabled {
     background-color: #ff493d;
     color: floralwhite;
+    cursor: not-allowed;
 }
-.usedLetterTrue{
+#container #top-of-container #alphabet .usedLetterTrue:disabled {
     background-color: #65ee71;
     color: floralwhite;
+    cursor: not-allowed;
+}
+#container #word-container #secret-letters span {
+    display: flex;
+    background-color: cornsilk;
+    font-size: 20px;
+    margin: 0.5%;
+    padding: 0.25%;
+    box-shadow: 3px 3px #e0bc6f;
+    cursor: crosshair;
+}
+body #level-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+body #level-container button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 40%;
+    margin-left: 40%;
+    margin-bottom: 2%;
+    padding: 2%;
+    border-radius: 4px;
+    background-color: #738aff;
+    border: none;
+    color: #313163;
+    font-family: "Bitstream Vera Sans Mono";
+    font-weight: bold;
+    box-shadow: 5px 5px #5555aa;
+    text-align: center;
+    font-size: 16px;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    font-family: "Bitstream Vera Sans Mono";
+    box-shadow: 5px 5px #8f93aa;
+    cursor: default;
+
+}
+.tooltip {
+    position: relative;
+    display: flex;
+    border-radius: 50%;
+    background-color: #fff482;
+    box-shadow: 8px 8px #918649;
+    z-index: 3;
+}
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: #fff38f;
+    color: #ffa01c;
+    text-align: center;
+    border-radius: 5%;
+    padding: 1% 0;
+    position: absolute;
+}
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+}
+.modal, .give-up-modal{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: fixed;
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+.close-button, .close-button-give-up{
+    float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: lightgray;
+}
+.close-button, .close-button-give-up:hover {
+    background-color: darkgray;
+}
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    overflow: hidden;
+    z-index: 10;
 }

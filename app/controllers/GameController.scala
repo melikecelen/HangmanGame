@@ -21,15 +21,17 @@ class GameController @Inject()(cc: ControllerComponents, gameService: GameServic
         try {
           gameService.createANewGame(level.level)
           val alphabet = gameService.alphabet
-          val word = gameService.currentGame.get.gameWord.getSecretWord()
+          val secretWord = gameService.currentGame.get.gameWord.getSecretWord()
+          val word = gameService.currentGame.get.gameWord.name
           val point = gameService.currentGame.get.Point
           val cardList = gameService.cardList
           val moveList = gameService.currentGame.get.moves
+          val usedCardList = gameService.currentGame.get.usedCards
          // val createResponseData:GameCreatedResponse=GameCreatedResponse(word.name,word.category,alphabet.values)
           //Ok(json.toJson(data.toMap))
          // Json.toJson(alphabet)
-          Ok(Json.obj("status" -> "OK", /*"message" -> Json.toJson(word,alphabet.values.toArray),*/"point"->Json.toJson(point), "secretWord"->Json.toJson(word),
-            "alphabet"->Json.toJson(alphabet.values.toArray),"cardList"->Json.toJson(cardList.values,"moveList"->Json.toJson(moveList))/*Json.toJson(cardList.keys.toArray)*/))
+          Ok(Json.obj("status" -> "OK", /*"message" -> Json.toJson(word,alphabet.values.toArray),*/"point"->Json.toJson(point), "secretWord"->Json.toJson(secretWord),
+            "alphabet"->Json.toJson(alphabet.values.toArray),"cardList"->Json.toJson(cardList.values),"moveList"->Json.toJson(moveList),"usedCardList"->Json.toJson(usedCardList),"word"->Json.toJson(word))/*Json.toJson(cardList.keys.toArray)*/)
          // Ok(Json.obj("status" -> "OK", "message" -> Json.toJson(createResponseData)))
 
         }
