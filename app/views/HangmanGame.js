@@ -1,6 +1,6 @@
-var moveList;
-var cardList;
-var Point = 100;
+let moveList;
+let cardList;
+let Point = 100;
 let word;
 
 
@@ -22,7 +22,7 @@ function updateCardsUsability(cardList) {
                 for (let i = 0; i < buttons.length; i++) {
                     buttons[i].disabled = "disabled";
                 }
-                /*****   document.getElementById('active-card').textContent =moveList[moveList.length - 1].card;*/
+                document.getElementById('active-card').textContent = "\""+moveList[moveList.length - 1].card+"\"";
             }
     }
 }
@@ -87,24 +87,22 @@ function cardCreator(cardList) {
 
 function pickCardFunc(event) {
     document.getElementById('active-card').textContent = event.target.name;
-    document.getElementById('active-card').value = event.target.innerText;
-    var obj1 = {cardName: document.getElementById('active-card').innerText.replace(/['"]+/g, '')};
-
+    document.getElementById('active-card').value = event.target.name;
+    var obj1 = {cardName: document.getElementById('active-card').value.replace(/['"]+/g, '')};
     switch (event.target.name.replace(/['"]+/g, '')) {
         case "Category":
             get('http://localhost:9000/guess', 'POST', JSON.stringify(obj1)).then(function (data) {
-                //    document.getElementById('secretword').textContent = data.response.message.secretWord;
                 document.getElementById('point').textContent = data.response.message.point;
                 document.getElementById('category').textContent += data.response.message.catName;
                 document.getElementById('active-card').textContent = '';
+                document.getElementById('active-card').value = ''; /////new
+
             });
             break;
         case "Buy A Letter":
             let letterButtons = document.getElementsByClassName('letter-button');
-
             for (let i = 0; i < letterButtons.length; i++)
                 letterButtons[i].disabled = 'disabled';
-
             let spanContainer = document.getElementById('secret-letters').getElementsByTagName('span');
             for (let i = 0; i < spanContainer.length; i++) {
                 if (spanContainer[i].innerText !== "*") {
@@ -113,7 +111,6 @@ function pickCardFunc(event) {
                     spanContainer[i].style.cursor = 'not-allowed';
                 }
             }
-
             break;
     }
     cardList.forEach(function (c) {
@@ -130,14 +127,14 @@ function pickCardFunc(event) {
         }
     }
 }
-
 function pickLetterFunc(event) {
-    if (document.getElementById('active-card').textContent !== '') {
-        event.target.value['cardName'] = document.getElementById('active-card').textContent;
+    if (document.getElementById('active-card').value !== '') {
+        event.target.value['cardName'] = document.getElementById('active-card').value;
     }
     let obj1 = {};
-    if (document.getElementById('active-card').textContent !== '') {
-        obj1 = {cardName: document.getElementById('active-card').textContent.replace(/['"]+/g, '')};
+    if (document.getElementById('active-card').value !== '') {
+        console.log(document.getElementById('active-card').value);
+        obj1 = {cardName: document.getElementById('active-card').value.replace(/['"]+/g, '')};
     }
     let obj2 = JSON.parse(event.target.value);
     let obj3 = Object.assign(obj1, obj2);
@@ -150,9 +147,16 @@ function pickLetterFunc(event) {
 
         document.getElementById('point').textContent = data.response.message.point;
         Point = data.response.message.point;
-        document.getElementById('active-card').textContent = '';
         moveList = data.response.moves;
         updateCardsUsability(cardList);
+
+        if (moveList[moveList.length - 1].card === "Consolation" && moveList[moveList.length - 1].result === false || moveList[moveList.length - 1].card === "Risk" && moveList[moveList.length - 1].result === true) {
+            document.getElementById('active-card').value = '';
+        }
+        else {
+            document.getElementById('active-card').textContent = '';
+            document.getElementById('active-card').value = '';
+        }
 
         if (data.response.message.gameState.finished === true) {
             gameFinsihed(data.response.message.gameState.message);
@@ -195,12 +199,12 @@ function get(url, method, data) {
         request.send(data);
     });
 }
-
 function buyALetter(event) {
-    var obj1 = {cardName: document.getElementById('active-card').textContent.replace(/['"]+/g, '')};
-    if (document.getElementById('active-card').textContent.replace(/['"]+/g, '') === "Buy A Letter") {
-        var obj2 = {position: JSON.parse(event.target.id)};
-        var obj3 = Object.assign(obj1, obj2);
+    let obj1 = {cardName: document.getElementById('active-card').value.replace(/['"]+/g, '')};
+    if (document.getElementById('active-card').value.replace(/['"]+/g, '') === "Buy A Letter") {
+
+        let obj2 = {position: JSON.parse(event.target.id)};
+        let obj3 = Object.assign(obj1, obj2);
         get('http://localhost:9000/guess', 'POST', JSON.stringify(obj3)).then(function (data) {
             let spanContainer = document.getElementById('secret-letters').getElementsByTagName('span');
             let secretWord = data.response.message.secretWord;
@@ -208,9 +212,8 @@ function buyALetter(event) {
                 spanContainer[i].textContent = secretWord[i];
             }
             document.getElementById('point').textContent = data.response.message.point;
-            if (data.response.message.catName !== undefined)
-                document.getElementById('category').textContent += data.response.message.catName;
             document.getElementById('active-card').textContent = '';
+            document.getElementById('active-card').value = '';
             updateCardsUsability(cardList);
         });
         let letterButtons = document.getElementsByClassName('letter-button');
@@ -255,11 +258,15 @@ function chooseALevel(event) {
             }
             document.getElementById('secret-letters').appendChild(newSpanElement);
         }
+
+        document.getElementById('active-card').value = '';
+        document.getElementById('active-card').textContent = '';
+
     });
     show(document.getElementById('container'), document.getElementById('level-container'));
 }
 
-var cardExplanation = ["Usage: If you have 20 or more points. you can use only 1 time",
+let cardExplanation = ["Usage: If you have 20 or more points. you can use only 1 time",
     "Usage: Choose a letter. If the guess is incorrect, the cost of next guess will be decreased by 50% and rounded down.",
     "Usage: You can learn the category of the word",
     "Usage: Make a letter guess. Cost of the letter is decreased 75% and rounded down. This card can be only used when remaining points are less than 40.",
@@ -275,9 +282,9 @@ function refresh() {
     window.location.reload(false);
 }
 
-var modal = document.querySelector(".modal");
-var trigger = document.querySelector("#how-to-play");
-var closeButton = document.querySelector(".close-button");
+let modal = document.querySelector(".modal");
+let trigger = document.querySelector("#how-to-play");
+let closeButton = document.querySelector(".close-button");
 
 function toggleModal() {
     modal.classList.toggle("show-modal");
@@ -292,9 +299,9 @@ function windowOnClick(event) {
 trigger.addEventListener("click", toggleModal);
 closeButton.addEventListener("click", toggleModal);
 window.addEventListener("click", windowOnClick);
-var giveupModal = document.querySelector('.give-up-modal');
-var giveupTrigger = document.querySelector('#give-up-button');
-var closeGiveup = document.querySelector(".close-button-give-up");
+let giveupModal = document.querySelector('.give-up-modal');
+let giveupTrigger = document.querySelector('#give-up-button');
+let closeGiveup = document.querySelector(".close-button-give-up");
 
 function toggleGiveupModal() {
     document.getElementById('secret-word').textContent += word;
