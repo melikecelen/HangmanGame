@@ -4,8 +4,9 @@ body {
     margin-left: 8%;
     margin-right: 8%;
     border: solid;
-    border-color: #b0b4cc;
-    box-shadow: 8px 8px #8f93aa;
+    border-color: #cc7d54;
+    background-color: #fdfff4;
+    box-shadow: 8px 8px #a1574f;
 }
 nav {
     display: flex;
@@ -42,6 +43,7 @@ nav ul li button{
 }
 #container #state-and-giveup {
     display: flex;
+    font-family: "Bitstream Vera Sans Mono";
     justify-content: center;
     flex-direction: column;
     color: #d25d16;
@@ -55,7 +57,8 @@ nav ul li button{
     box-shadow: 5px 5px #681d1d;
     border: none;
     cursor: pointer;
-
+    font-family: "Bitstream Vera Sans Mono";
+    font-weight: bold;
     border-radius: 20px;
     justify-content: center;
     padding: 10%;
@@ -199,6 +202,9 @@ h1 {
     box-shadow: 5px 5px #8f93aa;
     cursor: default;
 
+}
+body #level-container h1{
+    margin: 5%;
 }
 .tooltip {
     position: relative;
