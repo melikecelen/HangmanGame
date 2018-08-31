@@ -1,8 +1,11 @@
 body {
     display: flex;
     flex-direction: column;
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 8%;
+    margin-right: 8%;
+    border: solid;
+    border-color: #b0b4cc;
+    box-shadow: 8px 8px #8f93aa;
 }
 nav {
     display: flex;
@@ -20,14 +23,12 @@ nav ul li {
 nav ul li button{
     font-family: "Bitstream Vera Sans Mono";
     font-weight: bold;
-    box-shadow: 5px 5px #9e8775;
+    box-shadow: 6px 6px #9e8775;
     text-align: center;
-    font-size: 16px;
+    font-size: 25px;
     transition: all 0.5s;
     background-color: #ffe4c2;
-}
-nav ul li a {
-    display: flex;
+    cursor: grabbing;
 }
 #container {
     display: none;
@@ -184,7 +185,7 @@ body #level-container button {
     color: #313163;
     font-family: "Bitstream Vera Sans Mono";
     font-weight: bold;
-    box-shadow: 5px 5px #5555aa;
+    box-shadow: 6px 6px #5555aa;
     text-align: center;
     font-size: 16px;
     transition: all 0.5s;
@@ -211,11 +212,14 @@ h1 {
     visibility: hidden;
     width: 120px;
     background-color: #fff38f;
-    color: #ffa01c;
+    color: #c7731a;
     text-align: center;
-    border-radius: 5%;
-    padding: 1% 0;
+    border-radius: 20%;
+   /* padding: 1% 0;*/
     position: absolute;
+    padding: 2%;
+    margin: 2%;
+    border: solid #d9cd6e;
 }
 .tooltip:hover .tooltip-text {
     visibility: visible;

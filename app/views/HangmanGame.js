@@ -6,6 +6,7 @@ let word;
 function isCardAffordable(card) {
     return Point >= card.minPoint && Point <= card.maxPoint;
 }
+
 function updateCardsUsability(cardList) {
     let buttons = document.getElementsByClassName('card-button');
     for (let i = 0; i < buttons.length; i++) {
